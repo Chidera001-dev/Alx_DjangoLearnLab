@@ -1,7 +1,13 @@
-# delete.md
+from bookshelf.models import Book
 
-book = Book.objects.get(title="Nineteen Eighty-Four")
+# Retrieve the book
+book = Book.objects.get(title="1984")
+
+# Delete the book
 book.delete()
+# Output: (1, {'bookshelf.Book': 1})
 
-print(Book.objects.all())  
+# Confirm deletion
+Book.objects.all()
 # Output: <QuerySet []>
+
