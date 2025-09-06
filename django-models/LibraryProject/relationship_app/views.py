@@ -3,6 +3,7 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import permission_required
 from .models import Book
 from .models import Library
 
@@ -82,5 +83,23 @@ def librarian_view(request):
 def member_view(request):
     """Only Member users can access."""
     return render(request, "relationship_app/member_view.html")
+
+
+
+@permission_required('relationship_app.can_add_book', raise_exception=True)
+def add_book(request):
+    # logic to add a book
+    pass
+
+@permission_required('relationship_app.can_change_book', raise_exception=True)
+def edit_book(request, book_id):
+    # logic to edit a book
+    pass
+
+@permission_required('relationship_app.can_delete_book', raise_exception=True)
+def delete_book(request, book_id):
+    # logic to delete a book
+    pass
+
 
 
