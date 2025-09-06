@@ -1,10 +1,20 @@
 from django.urls import path
 from .views import list_books, LibraryDetailView
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from .views import list_books, LibraryDetailView, register_view, login_view, logout_view
+
 
 
 urlpatterns = [
     path('books/', list_books, name='list_books'),
     path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),
+
+    # Authentication
+    path('register/', register_view, name='register'),
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
 ]
 
 # Create your URL patterns here.
