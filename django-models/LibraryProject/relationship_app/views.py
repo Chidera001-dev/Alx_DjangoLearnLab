@@ -2,16 +2,16 @@ from django.shortcuts import render, redirect
 from django.views.generic import DetailView
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import Book, Library
+from .models import Book, Library  # combine imports for clarity
 
 
-# Function-based view (list all books)
+# Function-based view: list all books
 def list_books(request):
     books = Book.objects.all()
     return render(request, "relationship_app/list_books.html", {"books": books})
 
 
-# Class-based view (details for a specific library)
+# Class-based view: detail of a single library
 class LibraryDetailView(DetailView):
     model = Library
     template_name = "relationship_app/library_detail.html"
@@ -19,7 +19,7 @@ class LibraryDetailView(DetailView):
 
 
 # User registration view
-def register_view(request):
+def register(request):  # use 'register' to match urls.py
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -48,4 +48,5 @@ def login_view(request):
 def logout_view(request):
     auth_logout(request)
     return render(request, "relationship_app/logout.html")
+
 
