@@ -5,17 +5,14 @@ from .models import Book, Library
 # Function-based view
 def list_books(request):
     books = Book.objects.all()
-    # Render the template 'relationship_app/list_books.html'
-    # and pass a context where the template variable "books" = the queryset above.
     return render(request, "relationship_app/list_books.html", {"books": books})
 
-
 # Class-based view
-
 class LibraryDetailView(DetailView):
-    model = Library                     # the model this view displays
-    template_name = "relationship_app/library_detail.html"  # template to render
-    context_object_name = "library"     # template variable name for the Library instance
+    model = Library
+    template_name = "relationship_app/library_detail.html"
+    context_object_name = "library"
+
 
 
 
