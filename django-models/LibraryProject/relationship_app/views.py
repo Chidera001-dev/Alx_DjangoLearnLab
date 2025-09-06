@@ -23,9 +23,9 @@ def register_view(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()          # create user
-            auth_login(request, user)   # log in user immediately
-            return redirect("list_books")  # redirect after login
+            user = form.save()
+            auth_login(request, user)
+            return redirect("list_books")
     else:
         form = UserCreationForm()
     return render(request, "relationship_app/register.html", {"form": form})
@@ -37,7 +37,7 @@ def login_view(request):
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            auth_login(request, user)   # log in user
+            auth_login(request, user)
             return redirect("list_books")
     else:
         form = AuthenticationForm()
@@ -46,5 +46,6 @@ def login_view(request):
 
 # User logout view
 def logout_view(request):
-    auth_logout(request)  # log out user
+    auth_logout(request)
     return render(request, "relationship_app/logout.html")
+
