@@ -8,31 +8,21 @@ django.setup()
 
 from relationship_app.models import Author, Book, Library, Librarian
 
-# ---- create sample data (safe to run multiple times with get_or_create) ----
-author, _ = Author.objects.get_or_create(name="George Orwell")
-book1, _  = Book.objects.get_or_create(title="1984", author=author)
-book2, _  = Book.objects.get_or_create(title="Animal Farm", author=author)
 
-library, _ = Library.objects.get_or_create(name="Central Library")
-# add books to library (ManyToMany)
-library.books.add(book1, book2)
+# 1. Query all books by a specific author
+author_name = "John Doe"
+author = Author.objects.get(name=author_name)
+books_by_author = Book.objects.filter(author=author)
+print(f"Books by {author_name}:", books_by_author)
 
-librarian, _ = Librarian.objects.get_or_create(name="Jane Doe", library=library)
-
-# ---- Queries you were asked to prepare ----
-
-# Query all books by a specific author
-books_by_orwell = Book.objects.filter(author__name="George Orwell")
-print("Books by George Orwell:", [b.title for b in books_by_orwell])
-
-# List all books in a library
+# 2. List all books in a library
+library_name = "Central Library"
+library = Library.objects.get(name=library_name)   
 books_in_library = library.books.all()
-print(f"Books in {library.name}:", [b.title for b in books_in_library])
+print(f"Books in {library_name}:", books_in_library)
 
-# Retrieve the librarian for a library
-print(f"Librarian for {library.name}:", library.librarian.name)
+# 3. Retrieve the librarian for a library
+librarian = Librarian.objects.get(library=library)
+print(f"Librarian for {library_name}:", librarian.name)
 
-# Extra: Reverse lookups using related_name
-print("Books via author reverse lookup:", [b.title for b in author.books.all()])
-print("Libraries containing '1984':", [lib.name for lib in book1.libraries.all()])
 
