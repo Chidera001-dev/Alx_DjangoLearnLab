@@ -1,10 +1,21 @@
+# ==============================
+# Django core imports
+# ==============================
 from django.shortcuts import render, redirect
-from django.views.generic.detail import DetailView
-from django.contrib.auth import login as auth_login, logout as auth_logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.decorators import permission_required
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404  # templates + redirects + fetch objects
+from django.views.generic.detail import DetailView  # class-based detail view
+
+# ==============================
+# Authentication & Authorization
+# ==============================
+from django.contrib.auth import login as auth_login, logout as auth_logout  # login & logout functions
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm  # built-in auth forms
+from django.contrib.auth.decorators import (
+    login_required,      # ensures user is logged in
+    user_passes_test,    # ensures user passes a role check
+    permission_required  # ensures user has specific permission
+)
+
 from .forms import BookForm
 from .models import Book
 from .models import Library
@@ -85,7 +96,6 @@ def librarian_view(request):
 def member_view(request):
     """Only Member users can access."""
     return render(request, "relationship_app/member_view.html")
-
 
 
 # Add book view

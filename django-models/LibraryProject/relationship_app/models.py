@@ -1,6 +1,10 @@
-# relationship_app/models.py
+# Django core imports
 from django.db import models
+
+# User model for authentication
 from django.contrib.auth.models import User
+
+# Signals and dispatcher for auto-creating profiles
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -84,10 +88,6 @@ def create_or_update_userprofile(sender, instance, created, **kwargs):
             UserProfile.objects.create(user=instance)
 
 
-
-
-
-
 class Author(models.Model):
     name = models.CharField(max_length=200)
 
@@ -118,3 +118,10 @@ class Book(models.Model):
 
 
 # Create your models here.
+
+
+
+
+
+
+
