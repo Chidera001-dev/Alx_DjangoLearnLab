@@ -128,6 +128,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "bookshelf.CustomUser"
 
 
+
+# Authentication redirects
+LOGIN_REDIRECT_URL = "home"   # redirect after login
+LOGOUT_REDIRECT_URL = "login"  # redirect after logout
+LOGIN_URL = "login"            # redirect for @login_required views
+
+
 # ============================
 # 🔒 Security Configurations
 # ============================
@@ -159,5 +166,4 @@ SECURE_REFERRER_POLICY = "same-origin"
 # SameSite cookies (recommended for CSRF protection)
 SESSION_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SAMESITE = "Lax"
-
 
