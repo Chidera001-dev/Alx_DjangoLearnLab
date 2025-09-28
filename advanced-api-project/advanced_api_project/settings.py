@@ -43,6 +43,8 @@ INSTALLED_APPS = [
 
     # Local apps
     'api',
+
+    'rest_framework.authtoken',  # <-- add this
 ]
 
 MIDDLEWARE = [
@@ -126,3 +128,17 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# DRF Configuration
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',  # keep this if you still want admin login
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # default: all views require authentication
+    ]
+}

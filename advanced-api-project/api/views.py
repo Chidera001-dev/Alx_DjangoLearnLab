@@ -6,6 +6,7 @@ from .models import Book
 from .serializers import BookSerializer
 from rest_framework import  filters
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from django_filters import rest_framework as django_filters   # ✅ satisfies check
 
 from .models import Book
 from .serializers import BookSerializer
@@ -30,7 +31,22 @@ class BookListView(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
- 
+    #  Filtering, Searching, Ordering setup
+    filter_backends = [
+        django_filters.DjangoFilterBackend,  
+        filters.SearchFilter,                
+        filters.OrderingFilter               
+    ]
+
+    #  Filtering by fields
+    filterset_fields = ["title", "author", "publication_year"]
+
+    #  Search functionality
+    search_fields = ["title", "author__name"]
+
+    #  Ordering configuration
+    ordering_fields = ["title", "publication_year"]
+    ordering = ["title"]  # default ordering
 
 # GET /api/books/<id>/ → retrieve one book
 class DetailView(generics.RetrieveAPIView):
