@@ -1,7 +1,12 @@
-from rest_framework import viewsets, permissions, filters,generics
+from rest_framework import viewsets, permissions, filters,generics, status
 from django.contrib.auth import get_user_model
 from rest_framework.pagination import PageNumberPagination
 from .models import Post, Comment
+from rest_framework.response import Response 
+from django.contrib.contenttypes.models import ContentType
+from notifications.models import Notification
+from .models import Post, Like
+from django.shortcuts import get_object_or_404
 
 from .serializers import PostSerializer, CommentSerializer
 
@@ -65,9 +70,44 @@ class FeedView(generics.GenericAPIView):
         return Response(serializer.data)        
 
 
+class LikePostView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        user = request.user
+
+        # Check if already liked
+        if Like.objects.filter(post=post, user=user).exists():
+            return Response({"detail": "You already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
+
+        Like.objects.create(post=post, user=user)
+
+        # Create notification
+        if post.author != user:
+            Notification.objects.create(
+                recipient=post.author,
+                actor=user,
+                verb="liked your post",
+                target=post,
+            )
+
+        return Response({"detail": "Post liked successfully."}, status=status.HTTP_201_CREATED)
 
 
+class UnlikePostView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
 
+    def post(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        user = request.user
+
+        like = Like.objects.filter(post=post, user=user).first()
+        if not like:
+            return Response({"detail": "You haven’t liked this post."}, status=status.HTTP_400_BAD_REQUEST)
+
+        like.delete()
+        return Response({"detail": "Post unliked successfully."}, status=status.HTTP_200_OK)
 
 
 
