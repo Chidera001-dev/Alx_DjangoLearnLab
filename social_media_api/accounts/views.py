@@ -107,11 +107,11 @@ class FeedView(generics.GenericAPIView):
 
     def get(self, request):
         user = request.user
-        #  This line must appear exactly like this
-        following_users = user.following.all()  
+        
+        following_users = user.following.all()
 
-        #  The checker expects this exact structure
+        
         posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
 
         serializer = self.get_serializer(posts, many=True)
-        return Response(serializer.data)    
+        return Response(serializer.data)
