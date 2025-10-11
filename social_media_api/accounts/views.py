@@ -5,8 +5,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from .models import CustomUser
-from .models import Post
-from .serializers import PostSerializer
+
 
 from .serializers import RegisterSerializer, LoginSerializer, ProfileSerializer
 
@@ -101,17 +100,6 @@ class UnfollowUserView(generics.GenericAPIView):
         return Response({"detail": f"You have unfollowed {user_to_unfollow.username}."}, status=status.HTTP_200_OK)
     
 
-class FeedView(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = PostSerializer
 
-    def get(self, request):
-        user = request.user
-        
-        following_users = user.following.all()
-
-        
-        posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
-
-        serializer = self.get_serializer(posts, many=True)
-        return Response(serializer.data)
+    
+    

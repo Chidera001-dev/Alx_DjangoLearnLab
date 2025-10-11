@@ -1,7 +1,8 @@
-from rest_framework import viewsets, permissions, filters
+from rest_framework import viewsets, permissions, filters,generics
 from django.contrib.auth import get_user_model
 from rest_framework.pagination import PageNumberPagination
 from .models import Post, Comment
+
 from .serializers import PostSerializer, CommentSerializer
 
 User = get_user_model()
@@ -29,7 +30,7 @@ class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     pagination_class = StandardResultsSetPagination
 
-    # ✅ Filtering and Searching
+    #  Filtering and Searching
     filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'content']
 
@@ -46,6 +47,22 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+
+class FeedView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = PostSerializer
+
+    def get(self, request):
+        user = request.user
+        
+        following_users = user.following.all()
+
+        
+        posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
+
+        serializer = self.get_serializer(posts, many=True)
+        return Response(serializer.data)        
 
 
 
