@@ -1,4 +1,4 @@
-from rest_framework import generics, status
+from rest_framework import generics, status , permissions
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated  
 from rest_framework.authtoken.models import Token
@@ -14,7 +14,7 @@ User = get_user_model()
 #  Registration View
 class RegisterView(generics.GenericAPIView):
     serializer_class = RegisterSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
@@ -33,7 +33,7 @@ class RegisterView(generics.GenericAPIView):
 #  Login View
 class LoginView(generics.GenericAPIView):
     serializer_class = LoginSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
@@ -51,7 +51,7 @@ class LoginView(generics.GenericAPIView):
 #  Profile View
 class ProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
         return self.request.user
@@ -60,7 +60,7 @@ class ProfileView(generics.RetrieveUpdateAPIView):
 
 # 🔹 Follow another user
 class FollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
         try:
@@ -77,7 +77,7 @@ class FollowUserView(generics.GenericAPIView):
 
 # 🔹 Unfollow another user
 class UnfollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
         try:
@@ -97,7 +97,7 @@ class FeedView(generics.GenericAPIView):
     Returns posts from users the current user follows.
     Ordered by most recent first.
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = PostSerializer
 
     def get(self, request):
