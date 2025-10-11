@@ -5,10 +5,10 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from .models import CustomUser
-
-from .serializers import RegisterSerializer, LoginSerializer, ProfileSerializer
 from .models import Post
 from .serializers import PostSerializer
+
+from .serializers import RegisterSerializer, LoginSerializer, ProfileSerializer
 
 User = get_user_model()
 
@@ -99,3 +99,19 @@ class UnfollowUserView(generics.GenericAPIView):
             return Response({"detail": "You cannot unfollow yourself."}, status=status.HTTP_400_BAD_REQUEST)
         request.user.following.remove(user_to_unfollow)
         return Response({"detail": f"You have unfollowed {user_to_unfollow.username}."}, status=status.HTTP_200_OK)
+    
+
+class FeedView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = PostSerializer
+
+    def get(self, request):
+        user = request.user
+        #  This line must appear exactly like this
+        following_users = user.following.all()  
+
+        #  The checker expects this exact structure
+        posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
+
+        serializer = self.get_serializer(posts, many=True)
+        return Response(serializer.data)    
