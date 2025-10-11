@@ -1,12 +1,15 @@
-from django.urls import path
-from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import PostViewSet, CommentViewSet
 
+# 🔹 Create router instance
+router = DefaultRouter()
+
+# 🔹 Register routes for Post and Comment
+router.register(r'posts', PostViewSet, basename='post')
+router.register(r'comments', CommentViewSet, basename='comment')
+
+# 🔹 Include the router URLs
 urlpatterns = [
-    # ---- POSTS ----
-    path("posts/", views.PostListCreateView.as_view(), name="post-list-create"),
-    path("posts/<int:pk>/", views.PostDetailView.as_view(), name="post-detail"),
-
-    # ---- COMMENTS ----
-    path("comments/", views.CommentListCreateView.as_view(), name="comment-list-create"),
-    path("comments/<int:pk>/", views.CommentDetailView.as_view(), name="comment-detail"),
+    path('', include(router.urls)),
 ]
