@@ -74,42 +74,31 @@ class LikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
-        user = request.user
+        post = generics.get_object_or_404(Post, pk=pk)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
 
-        # Check if already liked
-        if Like.objects.filter(post=post, user=user).exists():
-            return Response({"detail": "You already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
+        if not created:
+            return Response({"message": "You already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
-        Like.objects.create(post=post, user=user)
+        # Optionally create notification
+        # Notification.objects.create(
+        #     recipient=post.author,
+        #     actor=request.user,
+        #     verb="liked your post",
+        #     target=post
+        # )
 
-        # Create notification
-        if post.author != user:
-            Notification.objects.create(
-                recipient=post.author,
-                actor=user,
-                verb="liked your post",
-                target=post,
-            )
-
-        return Response({"detail": "Post liked successfully."}, status=status.HTTP_201_CREATED)
+        return Response({"message": "Post liked successfully."}, status=status.HTTP_201_CREATED)
 
 
 class UnlikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
-        user = request.user
+        post = generics.get_object_or_404(Post, pk=pk)
+        like = Like.objects.filter(user=request.user, post=post).first()
 
-        like = Like.objects.filter(post=post, user=user).first()
-        if not like:
-            return Response({"detail": "You haven’t liked this post."}, status=status.HTTP_400_BAD_REQUEST)
-
-        like.delete()
-        return Response({"detail": "Post unliked successfully."}, status=status.HTTP_200_OK)
-
-
-
-
-# Create your views here.
+        if like:
+            like.delete()
+            return Response({"message": "Post unliked successfully."}, status=status.HTTP_200_OK)
+        return Response({"message": "You have not liked this post yet."}, status=status.HTTP_400_BAD_REQUEST)
