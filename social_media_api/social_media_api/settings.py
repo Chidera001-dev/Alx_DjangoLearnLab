@@ -19,7 +19,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
-ALLOWED_HOSTS = ['social_media_api.onrender.com']
+ALLOWED_HOSTS = ['alx-djangolearnlab-ejh7.onrender.com']
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
