@@ -52,8 +52,16 @@ DEBUG = config('DEBUG', cast=bool, default=False)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
 DATABASES = {
-    'default': dj_database_url.parse(config('DATABASE_URL'))
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'social_media_db_m2g7',
+        'USER': 'social_media_db_m2g7_user',
+        'PASSWORD': 'o1kzn2RHsreXe0sDFvT8kNPipXovYsUJ',
+        'HOST': 'dpg-d3lqt2mmcj7s73a5u2ag-a.oregon-postgres.render.com',
+        'PORT': '5432',
+    }
 }
+
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
