@@ -69,15 +69,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'social_media_api.wsgi.application'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-# Database (Render)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'social_media_db_m2g7',
-        'USER': 'social_media_db_m2g7_user',
-        'PASSWORD': 'o1kzn2RHsreXe0sDFvT8kNPipXovYsUJ',
-        'HOST': 'dpg-d3lqt2mmcj7s73a5u2ag-a.oregon-postgres.render.com',
-        'PORT': '5432',
+        'NAME': os.environ.get('DB_NAME', 'social_media_db_m2g7'),
+        'USER': os.environ.get('DB_USER', 'social_media_db_m2g7_user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'o1kzn2RHsreXe0sDFvT8kNPipXovYsUJ'),
+        'HOST': os.environ.get('DB_HOST', 'dpg-d3lqt2mmcj7s73a5u2ag-a.oregon-postgres.render.com'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
