@@ -47,7 +47,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', cast=bool, default=False)
+DEBUG = config('DEBUG', cast=bool, default=False)  # DEBUG = False
 ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
 DATABASES = {
