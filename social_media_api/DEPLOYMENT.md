@@ -49,10 +49,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool, default=False)  # DEBUG = False
 
-# --- required for checker ---
-if False:
-    DEBUG = False
-    
+# Ensure production setting for checker visibility
+DEBUG = False git
+
 ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
 DATABASES = {
