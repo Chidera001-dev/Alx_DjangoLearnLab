@@ -47,10 +47,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY', default='fallback-secret-key')
-DEBUG = config('DEBUG', cast=bool, default=False)  # DEBUG = False
-
-# Ensure production setting for checker visibility
-DEBUG = False 
+DEBUG = config('DEBUG', cast=bool, default=False)  
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
